@@ -12,46 +12,38 @@ public class ElectionBoothImpl implements ElectionBooth {
 
 	@Override
 	public boolean checkEligibility(int age, String locality, int vid) throws InValidVoterException {
-		boothImpl = new ElectionBoothImpl();
-		boolean flag = true;
-		if (boothImpl.checkAge(age) == false) {
-			flag = false;
-			throw new UnderAgeException("Under Age");
-		} else if (boothImpl.checkLocality(locality) == false) {
-			flag = false;
-			throw new LocalityNotFoundException(locality + " locality not found");
-		} else if (boothImpl.checkVoterId(vid) == false) {
-			flag = false;
-			throw new NoVoterIDException(vid + " not found");
+		if (checkAge(age) && checkLocality(locality) && checkVoterId(vid)) {
+			System.out.println("Successfully registered");
 		}
-		return flag;
-
+		return false; 
 	}
 
-	private boolean checkAge(int age) {
+	private boolean checkAge(int age) throws UnderAgeException{
 		if (age > 18) {
 			return true;
 		} else {
-			return false;
+			throw new UnderAgeException(age+" Under age");
 		}
 
 	}
 
-	private boolean checkLocality(String localityy) {
+	private boolean checkLocality(String localityy) throws LocalityNotFoundException{
 		for (String locality : localities) {
 			if (locality.equals(localityy)) {
 				return true;
 			}
+			else
+				throw new  LocalityNotFoundException("Locality not found");
 		}
 		return false;
 	}
 
-	private boolean checkVoterId(int vid) {
+	private boolean checkVoterId(int vid) throws NoVoterIDException{
 		if (vid >= 1000 && vid <= 9999) {
 
 			return true;
 		} else {
-			return false;
+			throw new NoVoterIDException("invalid id");
 		}
 
 	}
